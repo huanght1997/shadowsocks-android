@@ -6,4 +6,6 @@
 <string name="yes">"是"</string>
 <string name="no">"否"</string>
 <string name="apply">"套用"</string>
+    <string name="browse">瀏覽…</string>
+    <string name="file_manager_missing">請安裝檔案管理器</string>
 </resources>

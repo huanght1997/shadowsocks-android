@@ -62,6 +62,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
     }
 
     private var profileId = -1L
+    private var profileReadonly = false
     private lateinit var isProxyApps: SwitchPreference
     private lateinit var plugin: IconListPreference
     private lateinit var pluginConfigure: EditTextPreference
@@ -73,6 +74,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         preferenceManager.preferenceDataStore = DataStore.privateStore
         val activity = requireActivity()
         profileId = activity.intent.getLongExtra(Action.EXTRA_PROFILE_ID, -1L)
+        profileReadonly = activity.intent.getBooleanExtra(Action.EXTRA_PROFILE_READONLY, false)
         addPreferencesFromResource(R.xml.pref_profile)
         findPreference<EditTextPreference>(Key.remotePort)!!.onBindEditTextListener = EditTextPreferenceModifiers.Port
         findPreference<EditTextPreference>(Key.password)!!.summaryProvider = PasswordSummaryProvider
@@ -80,6 +82,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(Key.remoteDns)!!.isEnabled = serviceMode != Key.modeProxy
         findPreference<Preference>(Key.ipv6)!!.isEnabled = serviceMode == Key.modeVpn
         isProxyApps = findPreference(Key.proxyApps)!!
+
         isProxyApps.isEnabled = serviceMode == Key.modeVpn
         isProxyApps.setOnPreferenceClickListener {
             startActivity(Intent(activity, AppManager::class.java))
@@ -110,6 +113,23 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         receiver = Core.listenForPackageChanges(false) { initPlugins() }
         udpFallback = findPreference(Key.udpFallback)!!
         DataStore.privateStore.registerChangeListener(this)
+
+        if (profileReadonly) {
+            makeProfileNotSelectable(preferenceScreen)
+            findPreference<EditTextPreference>(Key.password)!!.summaryProvider = EditTextPreference.SimpleSummaryProvider.getInstance()
+        }
+    }
+
+    private fun makeProfileNotSelectable(preference: Preference?) {
+        if (preference == null) return
+        if (preference is PreferenceGroup) {
+            for (i in 0 until preference.preferenceCount) {
+                val childPref = preference.getPreference(i)
+                makeProfileNotSelectable(childPref)
+            }
+            return
+        }
+        preference.isSelectable = false
     }
 
     private fun initPlugins() {

@@ -17,7 +17,7 @@
         app:title="TCP Fast Open"/>
     <EditTextPreference
         app:key="hosts"
-        app:title="hosts"/>
+        app:title="@string/hosts" />
 
     <com.takisoft.preferencex.SimpleMenuPreference
         app:key="serviceMode"

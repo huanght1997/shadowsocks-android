@@ -107,6 +107,7 @@
   <string name="action_export_err">Failed to export.</string>
   <string name="action_import_msg">Successfully import!</string>
   <string name="action_import_err">Failed to import.</string>
+  <string name="readonly">(Read Only)</string>
 
   <!-- profile -->
   <string name="profile_config">Profile config</string>
@@ -151,4 +152,5 @@
   <string name="plugin_unknown">Unknown plugin %s</string>
   <string name="plugin_untrusted">Warning: This plugin does not seem to come from a known trusted source.</string>
   <string name="profile_plugin">Plugin: %s</string>
+  <string name="hosts">hosts</string>
 </resources>

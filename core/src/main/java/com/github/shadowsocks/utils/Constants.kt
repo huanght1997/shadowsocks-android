@@ -81,4 +81,5 @@ object Action {
     const val RELOAD = "com.github.shadowsocks.RELOAD"
 
     const val EXTRA_PROFILE_ID = "com.github.shadowsocks.EXTRA_PROFILE_ID"
+    const val EXTRA_PROFILE_READONLY = "com.github.shadowsocks.EXTRA_PROFILE_READONLY"
 }

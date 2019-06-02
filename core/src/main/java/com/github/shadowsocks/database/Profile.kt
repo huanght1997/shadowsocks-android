@@ -48,10 +48,10 @@ import java.util.*
 data class Profile(
         @PrimaryKey(autoGenerate = true)
         var id: Long = 0,
-        var name: String? = "",
-        var host: String = "198.199.101.152",
-        var remotePort: Int = 8388,
-        var password: String = "u1rRWTssNv0p",
+        var name: String? = "Example Profile",
+        var host: String = "0.0.0.0",
+        var remotePort: Int = 8888,
+        var password: String = "ThisIsThePassword",
         var method: String = "aes-256-cfb",
         var route: String = "all",
         var remoteDns: String = "dns.google",

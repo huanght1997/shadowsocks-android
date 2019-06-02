@@ -32,6 +32,7 @@ import com.github.shadowsocks.plugin.AlertDialogFragment
 import com.github.shadowsocks.plugin.Empty
 import com.github.shadowsocks.plugin.PluginContract
 import com.github.shadowsocks.preference.DataStore
+import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.SingleInstanceActivity
 
 class ProfileConfigActivity : AppCompatActivity() {
@@ -49,10 +50,12 @@ class ProfileConfigActivity : AppCompatActivity() {
     }
 
     private val child by lazy { supportFragmentManager.findFragmentById(R.id.content) as ProfileConfigFragment }
+    private var readOnly = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SingleInstanceActivity.register(this) ?: return
+        readOnly = intent.getBooleanExtra(Action.EXTRA_PROFILE_READONLY, false)
         setContentView(R.layout.layout_profile_config)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.apply {
@@ -67,9 +70,10 @@ class ProfileConfigActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.profile_config_menu, menu)
+        menuInflater.inflate(if (readOnly) R.menu.profile_config_menu_readonly else R.menu.profile_config_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem) = child.onOptionsItemSelected(item)
 
     override fun onBackPressed() {

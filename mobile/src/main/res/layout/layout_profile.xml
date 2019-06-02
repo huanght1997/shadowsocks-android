@@ -55,6 +55,18 @@
             android:focusable="true"
             android:padding="12dp"
             app:srcCompat="@drawable/ic_image_edit"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/see"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/browse"
+            android:focusable="false"
+            android:padding="12dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_image_see" />
     </LinearLayout>
 
     <RelativeLayout
