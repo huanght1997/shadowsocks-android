@@ -115,21 +115,24 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         DataStore.privateStore.registerChangeListener(this)
 
         if (profileReadonly) {
-            makeProfileNotSelectable(preferenceScreen)
-            findPreference<EditTextPreference>(Key.password)!!.summaryProvider = EditTextPreference.SimpleSummaryProvider.getInstance()
+            makeProfileDisabled(preferenceScreen)
+            findPreference<EditTextPreference>(Key.password)!!.apply {
+                layoutResource = R.layout.preference_password_readonly
+                summaryProvider = EditTextPreference.SimpleSummaryProvider.getInstance()
+            }
         }
     }
 
-    private fun makeProfileNotSelectable(preference: Preference?) {
+    private fun makeProfileDisabled(preference: Preference?) {
         if (preference == null) return
         if (preference is PreferenceGroup) {
             for (i in 0 until preference.preferenceCount) {
                 val childPref = preference.getPreference(i)
-                makeProfileNotSelectable(childPref)
+                makeProfileDisabled(childPref)
             }
             return
         }
-        preference.isSelectable = false
+        preference.isEnabled = false
     }
 
     private fun initPlugins() {
