@@ -1,17 +1,13 @@
-## [Shadowsocks](https://shadowsocks.org) for Android
+## Shadowsocks for Android
 
-[![CircleCI](https://circleci.com/gh/shadowsocks/shadowsocks-android.svg?style=shield)](https://circleci.com/gh/shadowsocks/shadowsocks-android)
+[![CircleCI](https://circleci.com/gh/huanght1997/shadowsocks-android.svg?style=shield)](https://circleci.com/gh/huanght1997/shadowsocks-android)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![Releases](https://img.shields.io/github/downloads/shadowsocks/shadowsocks-android/total.svg)](https://github.com/shadowsocks/shadowsocks-android/releases)
-[![Language: Kotlin](https://img.shields.io/github/languages/top/shadowsocks/shadowsocks-android.svg)](https://github.com/shadowsocks/shadowsocks-android/search?l=kotlin)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a21d48d466644cdbcb57a1889abea5b)](https://www.codacy.com/app/shadowsocks/shadowsocks-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=shadowsocks/shadowsocks-android&amp;utm_campaign=Badge_Grade)
+[![GitHub repo size](https://img.shields.io/github/repo-size/huanght1997/shadowsocks-android.svg)](https://github.com/huanght1997/shadowsocks-android/archive/master.zip)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/huanght1997/shadowsocks-android.svg)](https://github.com/huanght1997/shadowsocks-android/releases)
+[![Language: Kotlin](https://img.shields.io/github/languages/top/huanght1997/shadowsocks-android.svg)](https://github.com/huanght1997/shadowsocks-android/search?l=kotlin)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ff80169fd6d548d8a7a293535e66e837)](https://www.codacy.com/app/huanght1997/shadowsocks-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=huanght1997/shadowsocks-android&amp;utm_campaign=Badge_Grade)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshadowsocks%2Fshadowsocks-android.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshadowsocks%2Fshadowsocks-android?ref=badge_shield)
-
-<a href="https://play.google.com/store/apps/details?id=com.github.shadowsocks"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="48"></a>
-for Android & Chrome OS ([beta](https://play.google.com/apps/testing/com.github.shadowsocks))  
-<a href="https://play.google.com/store/apps/details?id=com.github.shadowsocks.tv"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="48"></a>
-for Android TV ([beta](https://play.google.com/apps/testing/com.github.shadowsocks.tv))
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhuanght1997%2Fshadowsocks-android.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhuanght1997%2Fshadowsocks-android?ref=badge_shield)
 
 
 ### PREREQUISITES
@@ -57,12 +53,14 @@ If you are interested in contributing or getting involved with this project, ple
 </ul>
 
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshadowsocks%2Fshadowsocks-android.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshadowsocks%2Fshadowsocks-android?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhuanght1997%2Fshadowsocks-android.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhuanght1997%2Fshadowsocks-android?ref=badge_large)
 
 ### LICENSE
 
 Copyright (C) 2017 by Max Lv <<max.c.lv@gmail.com>>  
 Copyright (C) 2017 by Mygod Studio <<contact-shadowsocks-android@mygod.be>>
+Copyright (C) 2019 by Haitao Huang
+<<hht970222@gmail.com>>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
