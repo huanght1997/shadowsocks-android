@@ -16,6 +16,16 @@
 * Android SDK
   - Android NDK
 
+### BEFORE BUILDING
+
+The original version, which what this repository forked from, uses Firebase to help analyze the statistics about the app. However, Firebase is part of Google Play Services. Therefore I removed Firebase and use Fabric only, though they will be the same thing soon :(
+
+Therefore if you want to build it by yourself you should have your own Fabric key. If you don't have one, get it here: [https://get.fabric.io]
+
+Follow the installation guide, you will be told that add something to your `AndroidManifest.xml`. You can see the Fabric key as the value of meta data.
+
+Add  one line `fabric.key=<your api key>` to `local.properties` at your root project directory. You can create this file by your self, but if you use Android Studio, `local.properties`should have already been generated automatically, what you should do is just appending a line to it.
+
 ### BUILD
 
 You can check whether the latest commit builds under UNIX environment by checking Travis status.
@@ -43,6 +53,8 @@ If you are interested in contributing or getting involved with this project, ple
 <ul>
     <li>redsocks: <a href="https://github.com/shadowsocks/redsocks/blob/shadowsocks-android/README">APL 2.0</a></li>
     <li>mbed TLS: <a href="https://github.com/ARMmbed/mbedtls/blob/development/LICENSE">APL 2.0</a></li>
+    <li>zxing: <a href="https://github.com/zxing/zxing/blob/master/LICENSE">APL 2.0</a></li>
+    <li>QRCodeReaderView: <a href="https://github.com/dlazaro66/QRCodeReaderView/blob/master/README.md">APL 2.0</a></li>
     <li>libevent: <a href="https://github.com/shadowsocks/libevent/blob/master/LICENSE">BSD</a></li>
     <li>tun2socks: <a href="https://github.com/shadowsocks/badvpn/blob/shadowsocks-android/COPYING">BSD</a></li>
     <li>pcre: <a href="https://android.googlesource.com/platform/external/pcre/+/master/dist2/LICENCE">BSD</a></li>
@@ -58,7 +70,7 @@ If you are interested in contributing or getting involved with this project, ple
 ### LICENSE
 
 Copyright (C) 2017 by Max Lv <<max.c.lv@gmail.com>>  
-Copyright (C) 2017 by Mygod Studio <<contact-shadowsocks-android@mygod.be>>
+Copyright (C) 2017 by Mygod Studio <<contact-shadowsocks-android@mygod.be>>  
 Copyright (C) 2019 by Haitao Huang
 <<hht970222@gmail.com>>
 

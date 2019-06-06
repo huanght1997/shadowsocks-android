@@ -84,10 +84,6 @@
             </intent-filter>
         </receiver>
 
-        <provider android:name="com.crashlytics.android.CrashlyticsInitProvider"
-                  tools:node="remove"/>
-        <provider android:name="com.google.firebase.provider.FirebaseInitProvider"
-                  tools:node="remove"/>
         <!-- https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/work/workmanager/src/main/AndroidManifest.xml -->
         <provider android:name="androidx.work.impl.WorkManagerInitializer"
                   tools:node="remove"/>
@@ -127,5 +123,9 @@
                   android:process=":bg"
                   android:directBootAware="true"
                   tools:replace="android:directBootAware"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricApiKey}" />
     </application>
 </manifest>

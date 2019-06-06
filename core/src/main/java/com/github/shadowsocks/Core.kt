@@ -47,8 +47,6 @@ import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.net.TcpFastOpen
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.*
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
@@ -63,7 +61,6 @@ object Core {
     lateinit var configureIntent: (Context) -> PendingIntent
     val packageInfo: PackageInfo by lazy { getPackageInfo(app.packageName) }
     val deviceStorage by lazy { if (Build.VERSION.SDK_INT < 24) app else DeviceStorageApp(app) }
-    val analytics: FirebaseAnalytics by lazy { FirebaseAnalytics.getInstance(deviceStorage) }
     val directBootSupported by lazy {
         Build.VERSION.SDK_INT >= 24 && app.getSystemService<DevicePolicyManager>()?.storageEncryptionStatus ==
                 DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE_PER_USER
@@ -101,8 +98,11 @@ object Core {
 
         // overhead of debug mode is minimal: https://github.com/Kotlin/kotlinx.coroutines/blob/f528898/docs/debugging.md#debug-mode
         System.setProperty(DEBUG_PROPERTY_NAME, DEBUG_PROPERTY_VALUE_ON)
-        Fabric.with(deviceStorage, Crashlytics())   // multiple processes needs manual set-up
-        FirebaseApp.initializeApp(deviceStorage)
+        val fabric = Fabric.Builder(deviceStorage)
+                .kits(Crashlytics())
+                .debuggable(true)
+                .build()
+        Fabric.with(fabric)   // multiple processes needs manual set-up
         WorkManager.initialize(deviceStorage, Configuration.Builder().build())
 
         // handle data restored/crash

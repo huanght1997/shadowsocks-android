@@ -27,7 +27,6 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.system.Os
@@ -36,7 +35,10 @@ import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.preference.Preference
 import com.crashlytics.android.Crashlytics
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import kotlin.coroutines.resume
@@ -78,8 +80,7 @@ fun broadcastReceiver(callback: (Context, Intent) -> Unit): BroadcastReceiver = 
 }
 
 fun ContentResolver.openBitmap(uri: Uri) =
-        if (Build.VERSION.SDK_INT >= 28) ImageDecoder.decodeBitmap(ImageDecoder.createSource(this, uri))
-        else BitmapFactory.decodeStream(openInputStream(uri))
+        BitmapFactory.decodeStream(openInputStream(uri))
 
 val PackageInfo.signaturesCompat get() =
     if (Build.VERSION.SDK_INT >= 28) signingInfo.apkContentsSigners else @Suppress("DEPRECATION") signatures

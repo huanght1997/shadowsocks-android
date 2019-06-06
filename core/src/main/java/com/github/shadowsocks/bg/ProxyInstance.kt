@@ -21,10 +21,8 @@
 package com.github.shadowsocks.bg
 
 import android.content.Context
-import android.util.Base64
 import android.util.Log
 import com.crashlytics.android.Crashlytics
-import com.github.shadowsocks.Core
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.acl.AclSyncer
 import com.github.shadowsocks.database.Profile
@@ -32,14 +30,9 @@ import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.parseNumericAddress
-import com.github.shadowsocks.utils.signaturesCompat
-import com.github.shadowsocks.utils.useCancellable
 import kotlinx.coroutines.*
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 import java.net.UnknownHostException
-import java.security.MessageDigest
 
 /**
  * This class sets up environment for ss-local.
@@ -52,29 +45,6 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     private var scheduleConfigUpdate = false
 
     suspend fun init(service: BaseService.Interface) {
-        if (profile.host == "198.199.101.152") {
-            scheduleConfigUpdate = true
-            val mdg = MessageDigest.getInstance("SHA-1")
-            mdg.update(Core.packageInfo.signaturesCompat.first().toByteArray())
-            val (config, success) = RemoteConfig.fetch()
-            scheduleConfigUpdate = !success
-            val conn = service.openConnection(URL(config.getString("proxy_url"))) as HttpURLConnection
-            conn.requestMethod = "POST"
-            conn.doOutput = true
-
-            val proxies = conn.useCancellable {
-                outputStream.bufferedWriter().use {
-                    it.write("sig=" + Base64.encodeToString(mdg.digest(), Base64.DEFAULT))
-                }
-                inputStream.bufferedReader().readText()
-            }.split('|').toMutableList()
-            proxies.shuffle()
-            val proxy = proxies.first().split(':')
-            profile.host = proxy[0].trim()
-            profile.remotePort = proxy[1].trim().toInt()
-            profile.password = proxy[2].trim()
-            profile.method = proxy[3].trim()
-        }
 
         if (route == Acl.CUSTOM_RULES) withContext(Dispatchers.IO) {
             Acl.save(Acl.CUSTOM_RULES, Acl.customRules.flatten(10, service::openConnection))
@@ -132,7 +102,6 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
     fun scheduleUpdate() {
         if (route !in arrayOf(Acl.ALL, Acl.CUSTOM_RULES)) AclSyncer.schedule(route)
-        if (scheduleConfigUpdate) RemoteConfig.scheduleFetch()
     }
 
     fun shutdown(scope: CoroutineScope) {

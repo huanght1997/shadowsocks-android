@@ -21,72 +21,35 @@
 package com.github.shadowsocks
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ShortcutManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import androidx.core.util.forEach
-import com.crashlytics.android.Crashlytics
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.utils.datas
 import com.github.shadowsocks.utils.openBitmap
 import com.github.shadowsocks.utils.printLog
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.samples.vision.barcodereader.BarcodeCapture
-import com.google.android.gms.samples.vision.barcodereader.BarcodeGraphic
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.barcode.Barcode
-import com.google.android.gms.vision.barcode.BarcodeDetector
-import xyz.belvi.mobilevisionbarcodescanner.BarcodeRetriever
+import com.google.zxing.*
+import com.google.zxing.common.GlobalHistogramBinarizer
+import com.google.zxing.qrcode.QRCodeReader
 
-class ScannerActivity : AppCompatActivity(), BarcodeRetriever {
+class ScannerActivity : AppCompatActivity(), ScannerFragment.Reader {
     companion object {
         private const val TAG = "ScannerActivity"
         private const val REQUEST_IMPORT = 2
         private const val REQUEST_IMPORT_OR_FINISH = 3
-        private const val REQUEST_GOOGLE_API = 4
-    }
-
-    private lateinit var detector: BarcodeDetector
-
-    private fun fallback() {
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=tw.com.quickmark")))
-        } catch (_: ActivityNotFoundException) { }
-        finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        detector = BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE)
-                .build()
-        if (!detector.isOperational) {
-            val availability = GoogleApiAvailability.getInstance()
-            val dialog = availability.getErrorDialog(this, availability.isGooglePlayServicesAvailable(this),
-                    REQUEST_GOOGLE_API)
-            if (dialog == null) {
-                Toast.makeText(this, R.string.common_google_play_services_notification_ticker, Toast.LENGTH_SHORT)
-                        .show()
-                fallback()
-            } else {
-                dialog.setOnDismissListener { fallback() }
-                dialog.show()
-            }
-            return
-        }
         if (Build.VERSION.SDK_INT >= 25) getSystemService<ShortcutManager>()!!.reportShortcutUsed("scan")
         if (try {
                     getSystemService<CameraManager>()?.cameraIdList?.isEmpty()
@@ -99,19 +62,17 @@ class ScannerActivity : AppCompatActivity(), BarcodeRetriever {
         setContentView(R.layout.layout_scanner)
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val capture = supportFragmentManager.findFragmentById(R.id.barcode) as BarcodeCapture
-        capture.setCustomDetector(detector)
-        capture.setRetrieval(this)
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.barcode, ScannerFragment.newInstance(this))
+                .commit()
     }
 
-    override fun onRetrieved(barcode: Barcode) = runOnUiThread {
-        Profile.findAllUrls(barcode.rawValue, Core.currentProfile?.first).forEach { ProfileManager.createProfile(it) }
+    override fun onQRCodeRead(text: String?) {
+        Profile.findAllUrls(text, Core.currentProfile?.first).forEach { ProfileManager.createProfile(it) }
         onSupportNavigateUp()
     }
-    override fun onRetrievedMultiple(closetToClick: Barcode?, barcode: MutableList<BarcodeGraphic>?) = check(false)
-    override fun onBitmapScanned(sparseArray: SparseArray<Barcode>?) { }
-    override fun onRetrievedFailed(reason: String?) = Crashlytics.log(Log.WARN, TAG, reason)
-    override fun onPermissionRequestDenied() {
+
+    override fun onCameraPermissionDenied() {
         Toast.makeText(this, R.string.add_profile_scanner_permission_required, Toast.LENGTH_SHORT).show()
         startImport()
     }
@@ -139,13 +100,27 @@ class ScannerActivity : AppCompatActivity(), BarcodeRetriever {
                 val feature = Core.currentProfile?.first
                 var success = false
                 for (uri in data!!.datas) try {
-                    detector.detect(Frame.Builder().setBitmap(contentResolver.openBitmap(uri)).build())
-                            .forEach { _, barcode ->
-                                Profile.findAllUrls(barcode.rawValue, feature).forEach {
-                                    ProfileManager.createProfile(it)
-                                    success = true
-                                }
-                            }
+                    val bitmap = contentResolver.openBitmap(uri)
+                    val width = bitmap.width
+                    val height = bitmap.height
+                    val pixels = IntArray(width * height)
+                    bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+                    val binaryBitmap = BinaryBitmap(GlobalHistogramBinarizer(RGBLuminanceSource(width, height, pixels)))
+
+                    val hints = HashMap<DecodeHintType, Any>()
+                    hints[DecodeHintType.CHARACTER_SET] = "utf-8"
+                    hints[DecodeHintType.TRY_HARDER] = true
+                    hints[DecodeHintType.POSSIBLE_FORMATS] = BarcodeFormat.QR_CODE
+
+                    val result = QRCodeReader().decode(binaryBitmap, hints)
+                    Profile.findAllUrls(result.text, feature).forEach {
+                        ProfileManager.createProfile(it)
+                        success = true
+                    }
+                } catch (e: NotFoundException) {
+                    // This is a normal exception when user chooses a wrong picture
+                    // Don't let it bother me via Crashlystics.
+                    e.printStackTrace()
                 } catch (e: Exception) {
                     printLog(e)
                 }
