@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+def apiKeyPropertiesFile = rootProject.file("apikey.properties")
+def apiKeyProperties = new Properties()
+apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+
 android {
     buildToolsVersion rootProject.buildToolsVersion
     compileSdkVersion rootProject.compileSdkVersion
@@ -12,9 +16,9 @@ android {
         targetSdkVersion rootProject.sdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        manifestPlaceholders = [fabricApiKey: properties.getProperty('fabric.key')]
+        manifestPlaceholders = [
+                fabricApiKey: apiKeyProperties['fabric.key'],
+                androidBackupKey: apiKeyProperties['android.backup.key']]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

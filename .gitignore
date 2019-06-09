@@ -1,5 +1,7 @@
 # Gradle & Android Studio
 local.properties
+apikey.properties
+keystore.properties
 .gradle/
 .externalNativeBuild/
 build/

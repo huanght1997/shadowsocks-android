@@ -20,12 +20,28 @@
 
 The original version, which what this repository forked from, uses Firebase to help analyze the statistics about the app. However, Firebase is part of Google Play Services. Therefore I removed Firebase and use Fabric only, though they will be the same thing soon :(
 
-Therefore if you want to build it by yourself you should have your own Fabric key. If you don't have one, get it here: [https://get.fabric.io]
+Therefore if you want to build it by yourself you should have your own Fabric key. If you don't have one, get it here: https://get.fabric.io
 
 Follow the installation guide, you will be told that add something to your `AndroidManifest.xml`. You can see the Fabric key as the value of meta data.
 
-Add  one line `fabric.key=<your api key>` to `local.properties` at your root project directory. You can create this file by your self, but if you use Android Studio, `local.properties`should have already been generated automatically, what you should do is just appending a line to it.
+Add  one line `fabric.key=<your api key>` to `apikey.properties` at your root project directory. If you don't have this file, just create it.
 
+If you want to enable Android Backup Service, follow this guide to register and get a key:
+
+https://developer.android.com/google/backup/signup
+
+Add one line `android.backup.key=<your backup key>` to `apikey.properties`. Or you can use my key: 
+
+`AEdPqrEAAAAIrGmzkFhajWpMwNx_Hb2JMwdbxZK7GJfQovBWCw`
+
+Also create `keystore.properties` at your root project directory. Your file should look like the following:
+
+```
+storePassword=<password of your keystore file>
+keyPassword=<password of your key>
+keyAlias=<alias of your key>
+storeFile=<the location of your keystore file>
+```
 ### BUILD
 
 You can check whether the latest commit builds under UNIX environment by checking Travis status.
