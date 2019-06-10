@@ -44,7 +44,6 @@ import com.github.shadowsocks.utils.readableMessage
 import kotlinx.coroutines.*
 import java.io.File
 import java.net.BindException
-import java.net.InetAddress
 import java.net.URL
 import java.net.UnknownHostException
 import java.util.*
@@ -295,7 +294,7 @@ object BaseService {
                 listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
 
         suspend fun preInit() { }
-        suspend fun resolver(host: String) = InetAddress.getAllByName(host)
+        suspend fun resolver(host: String) = DnsResolverCompat.resolveOnActiveNetwork(host)
         suspend fun openConnection(url: URL) = url.openConnection()
 
         fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
