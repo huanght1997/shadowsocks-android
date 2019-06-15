@@ -34,9 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.utils.datas
-import com.github.shadowsocks.utils.openBitmap
-import com.github.shadowsocks.utils.printLog
+import com.github.shadowsocks.utils.*
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
@@ -104,33 +102,37 @@ class ScannerActivity : AppCompatActivity(), ScannerFragment.Reader {
             REQUEST_IMPORT, REQUEST_IMPORT_OR_FINISH -> if (resultCode == Activity.RESULT_OK) {
                 val feature = Core.currentProfile?.first
                 var success = false
-                for (uri in data!!.datas) try {
-                    val bitmap = contentResolver.openBitmap(uri)
-                    val width = bitmap.width
-                    val height = bitmap.height
-                    val pixels = IntArray(width * height)
-                    bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-                    val binaryBitmap = BinaryBitmap(GlobalHistogramBinarizer(RGBLuminanceSource(width, height, pixels)))
+                try {
+                    data!!.datas.forEachTry { uri ->
+                        try {
+                            val bitmap = contentResolver.openBitmap(uri)
+                            val width = bitmap.width
+                            val height = bitmap.height
+                            val pixels = IntArray(width * height)
+                            bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+                            val binaryBitmap = BinaryBitmap(GlobalHistogramBinarizer(RGBLuminanceSource(width, height, pixels)))
 
-                    val hints = HashMap<DecodeHintType, Any>()
-                    hints[DecodeHintType.CHARACTER_SET] = "utf-8"
-                    hints[DecodeHintType.TRY_HARDER] = true
-                    hints[DecodeHintType.POSSIBLE_FORMATS] = BarcodeFormat.QR_CODE
+                            val hints = HashMap<DecodeHintType, Any>()
+                            hints[DecodeHintType.CHARACTER_SET] = "utf-8"
+                            hints[DecodeHintType.TRY_HARDER] = true
+                            hints[DecodeHintType.POSSIBLE_FORMATS] = BarcodeFormat.QR_CODE
 
-                    val result = QRCodeReader().decode(binaryBitmap, hints)
-                    Profile.findAllUrls(result.text, feature).forEach {
-                        ProfileManager.createProfile(it)
-                        success = true
+                            val result = QRCodeReader().decode(binaryBitmap, hints)
+                            Profile.findAllUrls(result.text, feature).forEach {
+                                ProfileManager.createProfile(it)
+                                success = true
+                            }
+                        } catch (e: NotFoundException) {
+                            // This is a normal exception when user chooses a wrong picture
+                            // Don't let it bother me via Crashlystics.
+                            e.printStackTrace()
+                        }
                     }
-                } catch (e: NotFoundException) {
-                    // This is a normal exception when user chooses a wrong picture
-                    // Don't let it bother me via Crashlystics.
-                    e.printStackTrace()
+                    Toast.makeText(this, if (success) R.string.action_import_msg else R.string.action_import_err,
+                            Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    printLog(e)
+                    Toast.makeText(this, e.readableMessage, Toast.LENGTH_LONG).show()
                 }
-                Toast.makeText(this, if (success) R.string.action_import_msg else R.string.action_import_err,
-                        Toast.LENGTH_SHORT).show()
                 onSupportNavigateUp()
             } else if (requestCode == REQUEST_IMPORT_OR_FINISH) onSupportNavigateUp()
             else -> super.onActivityResult(requestCode, resultCode, data)
