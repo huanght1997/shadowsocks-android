@@ -21,8 +21,6 @@
 package com.github.shadowsocks.bg
 
 import android.content.Context
-import android.util.Log
-import com.crashlytics.android.Crashlytics
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.acl.AclSyncer
 import com.github.shadowsocks.database.Profile
@@ -30,7 +28,9 @@ import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.parseNumericAddress
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.UnknownHostException
 
@@ -42,7 +42,6 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     var trafficMonitor: TrafficMonitor? = null
     private val plugin = PluginConfiguration(profile.plugin ?: "").selectedOptions
     val pluginPath by lazy { PluginManager.init(plugin) }
-    private var scheduleConfigUpdate = false
 
     suspend fun init(service: BaseService.Interface) {
 
@@ -52,16 +51,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         // it's hard to resolve DNS on a specific interface so we'll do it here
         if (profile.host.parseNumericAddress() == null) {
-            var retries = 0
-            while (true) try {
-                profile.host = service.resolver(profile.host).firstOrNull()?.hostAddress ?: throw UnknownHostException()
-                return
-            } catch (e: UnknownHostException) {
-                // retries are only needed on Chrome OS where arc0 is brought up/down during VPN changes
-                if (!DataStore.hasArc0) throw e
-                Thread.yield()
-                Crashlytics.log(Log.WARN, "ProxyInstance-resolver", "Retry resolving attempt #${++retries}")
-            }
+            profile.host = service.resolver(profile.host).firstOrNull()?.hostAddress ?: throw UnknownHostException()
         }
     }
 
