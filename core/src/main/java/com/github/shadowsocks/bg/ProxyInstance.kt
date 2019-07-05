@@ -24,6 +24,7 @@ import android.content.Context
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.acl.AclSyncer
 import com.github.shadowsocks.database.Profile
+import com.github.shadowsocks.net.HostsFile
 import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.PluginManager
 import com.github.shadowsocks.preference.DataStore
@@ -43,15 +44,15 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     private val plugin = PluginConfiguration(profile.plugin ?: "").selectedOptions
     val pluginPath by lazy { PluginManager.init(plugin) }
 
-    suspend fun init(service: BaseService.Interface) {
-
+    suspend fun init(service: BaseService.Interface, hosts: HostsFile) {
         if (route == Acl.CUSTOM_RULES) withContext(Dispatchers.IO) {
             Acl.save(Acl.CUSTOM_RULES, Acl.customRules.flatten(10, service::openConnection))
         }
 
         // it's hard to resolve DNS on a specific interface so we'll do it here
         if (profile.host.parseNumericAddress() == null) {
-            profile.host = service.resolver(profile.host).firstOrNull()?.hostAddress ?: throw UnknownHostException()
+            profile.host = (hosts.resolve(profile.host).firstOrNull() ?: service.resolver(profile.host).firstOrNull())
+                    ?.hostAddress ?: throw UnknownHostException()
         }
     }
 
