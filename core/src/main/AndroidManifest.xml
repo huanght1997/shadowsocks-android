@@ -124,7 +124,6 @@
                   android:process=":bg"
                   android:directBootAware="true"
                   tools:replace="android:directBootAware"/>
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricApiKey}" />

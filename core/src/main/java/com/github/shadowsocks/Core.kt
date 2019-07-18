@@ -51,6 +51,8 @@ import com.github.shadowsocks.utils.*
 import io.fabric.sdk.android.Fabric
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import kotlin.reflect.KClass
@@ -105,6 +107,10 @@ object Core {
                 .debuggable(true)
                 .build()
         Fabric.with(fabric)   // multiple processes needs manual set-up
+        WorkManager.initialize(deviceStorage, Configuration.Builder().apply {
+            setExecutor { GlobalScope.launch { it.run() } }
+            setTaskExecutor { GlobalScope.launch { it.run() } }
+        }.build())
 
         // handle data restored/crash
         if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware &&
