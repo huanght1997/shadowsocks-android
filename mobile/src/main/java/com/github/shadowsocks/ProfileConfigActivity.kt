@@ -34,6 +34,7 @@ import com.github.shadowsocks.plugin.PluginContract
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.SingleInstanceActivity
+import com.github.shadowsocks.utils.consumeSystemWindowInsetsWithList
 
 class ProfileConfigActivity : AppCompatActivity() {
     companion object {
@@ -57,6 +58,7 @@ class ProfileConfigActivity : AppCompatActivity() {
         SingleInstanceActivity.register(this) ?: return
         readOnly = intent.getBooleanExtra(Action.EXTRA_PROFILE_READONLY, false)
         setContentView(R.layout.layout_profile_config)
+        consumeSystemWindowInsetsWithList()
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.apply {
             setDisplayHomeAsUpEnabled(true)
