@@ -89,7 +89,7 @@
                 app:key="udpFallback"
                 app:title="@string/udp_fallback"
                 app:summary="@string/plugin_disabled">
-            <intent android:targetPackage="com.github.shadowsocks"
+            <intent android:targetPackage="${applicationId}"
                     android:targetClass="com.github.shadowsocks.UdpFallbackProfileActivity"/>
         </Preference>
 

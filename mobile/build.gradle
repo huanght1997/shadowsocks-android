@@ -76,7 +76,7 @@ androidExtensions {
 }
 
 resourcePlaceholders {
-    files = ['xml/shortcuts.xml']
+    files = ['xml/shortcuts.xml', 'xml/pref_profile.xml']
 }
 
 dependencies {
