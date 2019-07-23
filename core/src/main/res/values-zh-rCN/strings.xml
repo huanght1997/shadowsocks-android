@@ -5,10 +5,10 @@
     <string name="stat_summary">"上传: \t%3$s\t↑\t%1$s
 下载: \t%4$s\t↓\t%2$s"</string>
     <string name="connection_test_testing">"测试中…"</string>
-    <string name="connection_test_available">成功：HTTPS 握手延时 %d 毫秒</string>
-    <string name="connection_test_error">检测互联网连接失败：%s</string>
+    <string name="connection_test_available">"连接成功：HTTPS 握手延时 %d 毫秒"</string>
+    <string name="connection_test_error">"失败：%s"</string>
     <string name="connection_test_fail">"无互联网连接"</string>
-    <string name="connection_test_error_status_code">错误代码（#%d）</string>
+    <string name="connection_test_error_status_code">"错误代码（#%d）"</string>
 
     <!-- proxy category -->
     <string name="profile_name">"配置名称"</string>
@@ -31,17 +31,19 @@
     <string name="auto_connect_summary">"允许 Shadowsocks 随系统启动"</string>
     <string name="tcp_fastopen_summary">"切换可能需要 ROOT 权限"</string>
     <string name="tcp_fastopen_summary_unsupported">"不支持的内核版本: %s &lt; 3.7.1"</string>
+    <string name="udp_dns">"使用 UDP DNS"</string>
     <string name="udp_dns_summary">"需要远程服务器支持 UDP 转发"</string>
     <plurals name="hosts_summary">
-        <item quantity="other">已配置 %d 个主机名</item>
+        <item quantity="other">已配置 %d 个主机</item>
     </plurals>
 
     <!-- notification category -->
-    <string name="forward_success">Shadowsocks 已启动。</string>
+    <string name="forward_success">"后台服务已开始运行。"</string>
     <string name="invalid_server">"服务器名无效"</string>
     <string name="service_failed">"无法连接远程服务器"</string>
     <string name="stop">"停止"</string>
     <string name="stopping">"正在关闭…"</string>
+    <string name="vpn_error">"后台服务启动失败：%s"</string>
     <string name="reboot_required">"VPN 服务启动失败。你可能需要重启设备。"</string>
     <string name="profile_invalid_input">"未找到有效的配置文件。"</string>
 
@@ -62,11 +64,11 @@
     <string name="action_apply_all">"应用设置到所有配置文件"</string>
     <string name="action_export">"导出至剪贴板"</string>
     <string name="action_import">"从剪贴板导入"</string>
-    <string name="action_export_msg">导出成功！</string>
+    <string name="action_export_msg">"导出至剪贴板成功"</string>
     <string name="action_export_err">"导出至剪贴板失败"</string>
     <string name="action_import_msg">"导入成功"</string>
     <string name="action_import_err">"导入失败"</string>
-    <string name="readonly">（只读）</string>
+    <string name="readonly">"（只读）"</string>
 
     <!-- profile -->
     <string name="profile_config">"配置文件设置"</string>
@@ -113,7 +115,7 @@
     <string name="plugin_configure">"配置…"</string>
     <string name="plugin_disabled">"禁用"</string>
     <string name="plugin_unknown">"未知插件 %s"</string>
-    <string name="plugin_untrusted">警告：该插件似乎并非来自已知的可信来源。</string>
+    <string name="plugin_untrusted">"警告：该插件似乎并非来自已知的可信源。"</string>
     <string name="profile_plugin">"插件：%s"</string>
     <string name="add_profile_scanner_permission_required">"扫描二维码需要获得使用相机的权限。"</string>
 
@@ -133,7 +135,7 @@
     <string name="port_transproxy">"透明代理端口"</string>
     <string name="service_proxy">"代理模式"</string>
     <string name="service_transproxy">"透明代理模式"</string>
-    <string name="vpn_permission_denied">未获得创建 VPN 服务权限</string>
+    <string name="vpn_permission_denied">"创建 VPN 服务权限不足"</string>
     <string name="auto_connect_summary_v24">"允许 Shadowsocks 随系统启动，建议使用始终开启的 VPN"</string>
     <string name="direct_boot_aware">"允许锁屏时切换"</string>
     <string name="direct_boot_aware_summary">"选中的配置信息会不那么安全"</string>
@@ -152,6 +154,7 @@
     <string name="connection_test_pending">"检查连接"</string>
     <string name="file_manager_missing">"请安装文件管理器，如 MiXplorer"</string>
     <string name="tcp_fastopen_failure">"切换失败"</string>
+    <string name="udp_fallback">"UDP 配置"</string>
     <string name="action_replace_file">"从文件替换…"</string>
     <string name="off">"关"</string>
     <string name="proxied_apps_mode">"模式"</string>
