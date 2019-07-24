@@ -13,3 +13,4 @@ release/
 
 # release apks
 *.apk
+*.jks

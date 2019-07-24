@@ -22,12 +22,16 @@
 -->
 
 <resources>
-    <string name="proxy_cat">"服务器设置"</string>
-    <string name="feature_cat">"功能设置"</string>
-    <string name="unsaved_changes_prompt">"是否要保存修改？"</string>
-    <string name="yes">"是"</string>
-    <string name="no">"否"</string>
-    <string name="apply">"应用"</string>
-    <string name="browse">浏览…</string>
-    <string name="file_manager_missing">请安装文件管理器，如MiXplorer</string>
+    <string name="quick_toggle">"تغيير"</string>
+    <string name="remote_dns">"سيرفر ال DNS"</string>
+    <string name="stat_summary">"ارسل: \t%3$s\t↑\t%1$s
+استقبل: \t%4$s\t↓\t%2$s"</string>
+    <string name="connection_test_testing">"اختبار الاتصال..."</string>
+    <string name="connection_test_error">"فشل فحص اتصال الانترنت: %s"</string>
+    <string name="connection_test_fail">"لا يوجد اتصال بالانترنت"</string>
+    <string name="connection_test_error_status_code">"خطآ رقم: #%d"</string>
+    <string name="proxy">"السيرفر"</string>
+    <string name="remote_port">"المنفذ"</string>
+    <string name="sitekey">"كلمة المرور"</string>
+    <string name="enc_method">"طريقة التشفير"</string>
 </resources>

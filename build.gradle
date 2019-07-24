@@ -12,9 +12,9 @@ buildscript {
         junitVersion = '4.12'
         androidTestVersion = '1.2.0'
         androidEspressoVersion = '3.2.0'
-        versionCode = 4080255
-        versionName = '4.8.2-nogms'
-        resConfigs = ['es', 'fa', 'fr', 'ja', 'ko', 'ru', 'tr', 'zh-rCN', 'zh-rTW']
+        versionCode = 4080355
+        versionName = '4.8.3-nogms'
+        resConfigs = ['ar', 'es', 'fa', 'fr', 'ja', 'ko', 'ru', 'tr', 'zh-rCN', 'zh-rTW']
     }
 
     repositories {
