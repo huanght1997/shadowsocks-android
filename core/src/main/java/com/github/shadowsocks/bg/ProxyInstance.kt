@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.IOException
 import java.net.UnknownHostException
 
 /**
@@ -51,8 +52,11 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
         // it's hard to resolve DNS on a specific interface so we'll do it here
         if (profile.host.parseNumericAddress() == null) {
-            profile.host = (hosts.resolve(profile.host).firstOrNull() ?: service.resolver(profile.host).firstOrNull())
-                    ?.hostAddress ?: throw UnknownHostException()
+            profile.host = (hosts.resolve(profile.host).firstOrNull() ?: try {
+                service.resolver(profile.host).firstOrNull()
+            } catch (_: IOException) {
+                null
+            })?.hostAddress ?: throw UnknownHostException()
         }
     }
 
