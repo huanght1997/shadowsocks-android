@@ -78,6 +78,7 @@
     <string name="profiles">"配置文件"</string>
     <string name="settings">"设置选项"</string>
     <string name="faq">"常见问题"</string>
+    <string name="faq_url">https://github.com/huanght1997/shadowsocks-android/blob/master/.github/faq.zh_CN.md</string>
     <string name="about">"关于"</string>
     <string name="about_title">Shadowsocks %s</string>
     <string name="edit">"编辑"</string>
