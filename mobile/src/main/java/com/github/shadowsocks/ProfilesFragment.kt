@@ -53,6 +53,8 @@ import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.datas
 import com.github.shadowsocks.utils.printLog
 import com.github.shadowsocks.utils.readableMessage
+import com.github.shadowsocks.widget.ListHolderListener
+import com.github.shadowsocks.widget.MainListListener
 import com.github.shadowsocks.widget.UndoSnackbarManager
 import net.glxn.qrgen.android.QRCode
 
@@ -283,6 +285,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.setOnApplyWindowInsetsListener(ListHolderListener)
         toolbar.setTitle(R.string.profiles)
         toolbar.inflateMenu(R.menu.profile_manager_menu)
         toolbar.setOnMenuItemClickListener(this)
@@ -291,6 +294,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
 
         ProfileManager.ensureNotEmpty()
         val profilesList = view.findViewById<RecyclerView>(R.id.list)
+        profilesList.setOnApplyWindowInsetsListener(MainListListener)
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         profilesList.layoutManager = layoutManager
         profilesList.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))

@@ -29,10 +29,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.RemoteException
 import android.util.Log
-import android.view.KeyCharacterMap
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -40,6 +37,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceDataStore
 import com.crashlytics.android.Crashlytics
@@ -52,6 +50,7 @@ import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.preference.OnPreferenceDataStoreChangeListener
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.SingleInstanceActivity
+import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.ServiceButton
 import com.github.shadowsocks.widget.StatsBar
 import com.google.android.material.navigation.NavigationView
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
     internal lateinit var drawer: DrawerLayout
     private lateinit var navigation: NavigationView
 
-    val snackbar by lazy { findViewById<CoordinatorLayout>(R.id.snackbar) }
+    lateinit var snackbar: CoordinatorLayout private set
     fun snackbar(text: CharSequence = "") = Snackbar.make(snackbar, text, Snackbar.LENGTH_LONG).apply {
         anchorView = fab
     }
@@ -157,6 +156,8 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
         super.onCreate(savedInstanceState)
         SingleInstanceActivity.register(this) ?: return
         setContentView(R.layout.layout_main)
+        snackbar = findViewById(R.id.snackbar)
+        snackbar.setOnApplyWindowInsetsListener(ListHolderListener)
         stats = findViewById(R.id.stats)
         stats.setOnClickListener { if (state == BaseService.State.Connected) stats.testConnection() }
         drawer = findViewById(R.id.drawer)
@@ -170,6 +171,13 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
 
         fab = findViewById(R.id.fab)
         fab.setOnClickListener { toggle() }
+        fab.setOnApplyWindowInsetsListener { view, insets ->
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.systemWindowInsetBottom +
+                        resources.getDimensionPixelOffset(R.dimen.mtrl_bottomappbar_fab_bottom_margin)
+            }
+            insets
+        }
 
         changeState(BaseService.State.Idle) // reset everything to init state
         connection.connect(this, this)
