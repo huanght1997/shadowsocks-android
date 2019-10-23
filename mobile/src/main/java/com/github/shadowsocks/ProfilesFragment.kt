@@ -173,7 +173,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
 
         override fun onMenuItemClick(item: MenuItem): Boolean = when (item.itemId) {
             R.id.action_qr_code -> {
-                requireFragmentManager().beginTransaction().add(QRCodeDialog(this.item.toString()), "")
+                parentFragmentManager.beginTransaction().add(QRCodeDialog(this.item.toString()), "")
                         .commitAllowingStateLoss()
                 true
             }
