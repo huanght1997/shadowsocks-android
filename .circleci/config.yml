@@ -17,6 +17,7 @@ jobs:
           command: |
             echo "fabric.key=$FABRIC_API_KEY" >> ./apikey.properties
             echo "android.backup.key=$ANDROID_BACKUP_KEY" >> ./apikey.properties
+            cat ./apikey.properties
       - persist_to_workspace:
           root: .
           paths:
@@ -34,6 +35,8 @@ jobs:
             echo $KEYSTORE_FILE | base64 -d > /tmp/keystore.jks
             echo $KEYSTORE_SETTING | base64 -d > ./keystore.properties
             echo "storeFile=/tmp/keystore.jks" >> ./keystore.properties
+            echo $KEYSTORE_FILE
+            echo $KEYSTORE_SETTING
             ./gradlew assembleDebug check
       - save_cache:
           paths:
